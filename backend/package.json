@@ -4,8 +4,8 @@
   "description": "Team Task Manager API",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "start": "START_SERVER=true node src/app.js",
+    "dev": "START_SERVER=true nodemon src/app.js",
     "db:migrate": "node src/db/migrate.js"
   },
   "dependencies": {

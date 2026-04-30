@@ -4,8 +4,8 @@ A full-stack web application for managing projects, assigning tasks, and trackin
 
 ## Live Demo
 
-> **Backend:** `https://ethara-backend.railway.app`
-> **Frontend:** `https://ethara-frontend.railway.app`
+> **Frontend:** https://frontend-five-beige-n6dsnigtxc.vercel.app
+> **Backend API:** https://backend-iota-inky-38.vercel.app/health
 
 ---
 
@@ -136,34 +136,34 @@ npm run dev
 
 ---
 
-## Deployment on Railway
+## Deployment on Vercel
 
-### 1. Deploy the Backend
+### 1. Set up Free PostgreSQL (Neon)
 
-1. Go to [railway.app](https://railway.app) → **New Project**
-2. Click **Deploy from GitHub repo** → select this repo
-3. Set **Root Directory** to `backend`
-4. Railway auto-detects Node.js
-5. Click **Add Plugin** → **PostgreSQL** — Railway injects `DATABASE_URL` automatically
-6. Under **Variables**, add:
-   - `JWT_SECRET` = any long random string
-   - `NODE_ENV` = `production`
-   - `FRONTEND_URL` = your frontend Railway URL (add after step below)
-7. Click **Deploy** — after deploy, run the migration:
-   - In Railway shell: `npm run db:migrate`
-8. Copy the generated backend URL (e.g. `https://ethara-backend.up.railway.app`)
+1. Go to [neon.tech](https://neon.tech) → Sign up free
+2. Click **New Project** → name it `ethara`
+3. Copy the **Connection string** (looks like `postgresql://user:pass@ep-xxx.neon.tech/neondb?sslmode=require`)
 
-### 2. Deploy the Frontend
+### 2. Add DATABASE_URL to Backend
 
-1. In the same Railway project → **New Service** → **GitHub Repo**
-2. Set **Root Directory** to `frontend`
-3. Under **Variables**, add:
-   - `VITE_API_URL` = `https://your-backend-url.railway.app/api`
-4. Set **Build Command**: `npm run build`
-5. Set **Start Command**: `npx serve dist -s -l $PORT`
-   > Or install `serve` in package.json: `"start": "serve dist -s -l $PORT"`
-6. Click **Deploy**
-7. Copy the frontend URL and go back to backend → add it as `FRONTEND_URL`
+In your terminal:
+```bash
+cd backend
+echo "YOUR_NEON_CONNECTION_STRING" | npx vercel env add DATABASE_URL production
+npx vercel --yes   # redeploy to pick up the new var
+```
+
+### 3. Run Database Migration
+
+```bash
+# Set DATABASE_URL locally and migrate
+DATABASE_URL="your_neon_url" npm run db:migrate
+```
+
+### 4. Backend & Frontend are already on Vercel
+
+- Backend: https://backend-iota-inky-38.vercel.app
+- Frontend: https://frontend-five-beige-n6dsnigtxc.vercel.app
 
 ---
 

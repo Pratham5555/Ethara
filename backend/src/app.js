@@ -9,8 +9,18 @@ const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.replace(/^["']|["']$/g, '').split(',').map(o => o.trim())
+  : [];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : '*',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (curl, mobile apps, Postman)
+    if (!origin) return callback(null, true);
+    // Allow if no FRONTEND_URL set (open) or origin matches
+    if (!allowedOrigins.length || allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error('CORS: origin not allowed'));
+  },
   credentials: true,
 }));
 app.use(express.json());

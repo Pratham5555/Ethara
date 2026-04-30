@@ -27,6 +27,7 @@ async function signup(req, res) {
     const token = signToken(user);
     res.status(201).json({ token, user });
   } catch (err) {
+    console.error('signup error:', err.message);
     res.status(500).json({ error: 'Server error' });
   }
 }
@@ -48,6 +49,7 @@ async function login(req, res) {
     const { password: _, ...safeUser } = user;
     res.json({ token, user: safeUser });
   } catch (err) {
+    console.error('login error:', err.message);
     res.status(500).json({ error: 'Server error' });
   }
 }

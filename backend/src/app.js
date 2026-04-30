@@ -20,7 +20,15 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+// Auto-migrate on startup — safe to run repeatedly because schema uses IF NOT EXISTS
+const fs = require('fs');
+const path = require('path');
+const pool = require('./config/database');
+const schemaSql = fs.readFileSync(path.join(__dirname, 'db/schema.sql'), 'utf8');
+pool.query(schemaSql).then(() => console.log('Schema ready')).catch((e) => console.error('Schema error:', e.message));
+
 app.get('/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+
 
 app.use((_req, res) => res.status(404).json({ error: 'Route not found' }));
 

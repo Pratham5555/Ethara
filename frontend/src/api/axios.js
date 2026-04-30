@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-const rawUrl = import.meta.env.VITE_API_URL || '';
-const baseURL = rawUrl.replace(/^["']|["']$/g, '') || '/api';
+const FALLBACK = 'https://backend-iota-inky-38.vercel.app/api';
+const rawUrl = (import.meta.env.VITE_API_URL || '')
+  .replace(/^﻿/, '')       // strip BOM
+  .replace(/^["']|["']$/g, ''); // strip accidental quotes
+const baseURL = (rawUrl.startsWith('http') ? rawUrl : null) || FALLBACK;
 
 const api = axios.create({ baseURL });
 
